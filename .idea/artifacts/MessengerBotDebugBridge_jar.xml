@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MessengerBotDebugBridge:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MessengerBotDebugBridge_jar</output-path>
+    <root id="archive" name="MessengerBotDebugBridge.jar">
+      <element id="module-output" name="MessengerBotDebugBridge" />
+    </root>
+  </artifact>
+</component>

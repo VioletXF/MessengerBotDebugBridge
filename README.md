@@ -11,6 +11,8 @@ org.json is needed to use this library.
 implementation group: 'org.json', name: 'json', version: '20200518'
 ```
 
+And, of course, you need an ADB binary file. [Download SDK Platform-Tools for Windows](https://developer.android.com/studio/releases/platform-tools)
+
 ## MDB
 `MDB` helps to compile, turn on/off bots, deactivate/activate MessengerBot remotely.
 ```java

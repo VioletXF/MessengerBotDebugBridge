@@ -16,10 +16,10 @@ public class DebugRoom {
     private OnErrorListener onErrorListener;
     private final ADB adb;
     private Boolean isConnected = false;
-    interface OnMessageListener {
+    public interface OnMessageListener {
         void onEvent(MessageData message);
     }
-    interface OnErrorListener {
+    public interface OnErrorListener {
         void onEvent(String error);
     }
     public DebugRoom(ADB adb){

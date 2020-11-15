@@ -1,6 +1,13 @@
 # MessengerBotDebugBridge (MDB)
 sample code is also included in `Main.java`
 
+## Dependencies
+org.json is needed to use this library.
+```gradle
+// gradle
+implementation group: 'org.json', name: 'json', version: '20200518'
+```
+
 ## MDB
 `MDB` helps to compile, turn on/off bots, deactivate/activate MessengerBot remotely.
 ```java

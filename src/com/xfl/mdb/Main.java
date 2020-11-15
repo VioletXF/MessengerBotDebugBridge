@@ -28,14 +28,14 @@ public class Main {
                 }
             });
             DebugRoom.MessageData messageData = new DebugRoom.MessageData();
-            messageData.setAuthorName("David")
+            messageData
                     .setBotName("MyBot")
+                    .setAuthorName("David")
                     .setIsGroupChat(true)
                     .setPackageName("com.xfl.msgbot")
                     .setRoomName("MyChatRoom")
                     .setMessage("Hello World!");
             dr.send(messageData);
-            //dr.disconnect();
 
         } catch (IOException e) {
             e.printStackTrace();

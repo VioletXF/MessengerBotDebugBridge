@@ -15,15 +15,15 @@ public class Main {
             Integer port = 9500; // default port number of MessengerBot
 
             dr.connect(port, port);
-            dr.setOnMessage(new DebugRoom.OnMessage() {
+            dr.setOnMessageListener(new DebugRoom.OnMessageListener() {
                 @Override
-                public void run(DebugRoom.MessageData message) {
+                public void onEvent(DebugRoom.MessageData message) {
                     System.out.println("onMessage: " + message);
                 }
             });
-            dr.setOnError(new DebugRoom.OnError() {
+            dr.setOnErrorListener(new DebugRoom.OnErrorListener() {
                 @Override
-                public void run(String error) {
+                public void onEvent(String error) {
                     System.out.println("onError: " + error);
                 }
             });

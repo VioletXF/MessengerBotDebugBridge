@@ -18,18 +18,18 @@ ADB adb = new ADB("YOUR_ADB_PATH\\adb.exe");
 DebugRoom debugRoom = new DebugRoom(adb);
 Integer port = 9500; // default port of MessengerBot
 debugRoom.connect(port, port); // localPort, remotePort
-debugRoom.setOnMessage(new DebugRoom.OnMessage() {
+debugRoom.setOnMessageListener(new DebugRoom.OnMessageListener() {
     @Override
-    public void run(DebugRoom.MessageData message) {
+    public void onEvent(DebugRoom.MessageData message) {
         if(message.getIsBot()){
             System.out.println("the bot says: "+message.getMessage());
         }
     }
 });
 
-debugRoom.setOnError(new DebugRoom.OnError() {
+debugRoom.setOnErrorListener(new DebugRoom.OnErrorListener() {
     @Override
-    public void run(String error) {
+    public void onEvent(String error) {
         System.out.println("error: " + error);
     }
 });

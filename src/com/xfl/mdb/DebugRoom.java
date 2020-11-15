@@ -12,15 +12,15 @@ public class DebugRoom {
     private final SocketConnection connection;
     private BufferedReader reader;
     private BufferedWriter writer;
-    private OnMessage onMessage;
-    private OnError onError;
+    private OnMessageListener onMessageListener;
+    private OnErrorListener onErrorListener;
     private final ADB adb;
     private Boolean isConnected = false;
-    interface OnMessage{
-        void run(MessageData message);
+    interface OnMessageListener {
+        void onEvent(MessageData message);
     }
-    interface OnError{
-        void run(String error);
+    interface OnErrorListener {
+        void onEvent(String error);
     }
     public DebugRoom(ADB adb){
         this.adb = adb;
@@ -54,12 +54,12 @@ public class DebugRoom {
                         msg.setAuthorName(data.getString("authorName"));
                         msg.setMessage(data.getString("message"));
                         msg.setIsBot(data.getBoolean("isBot"));
-                        onMessage.run(msg);
+                        onMessageListener.onEvent(msg);
                     }
                     case "badRequest:debugRoom" -> {
                         JSONObject edata = json.getJSONObject("data");
                         String error = edata.getString("error");
-                        onError.run(error);
+                        onErrorListener.onEvent(error);
                     }
                 }
 
@@ -98,12 +98,11 @@ public class DebugRoom {
         writer.write(str+"\n");
         writer.flush();
     }
-    public void setOnError(OnError onError){
-        this.onError = onError;
+    public void setOnErrorListener(OnErrorListener onErrorListener){
+        this.onErrorListener = onErrorListener;
     }
-    public void setOnMessage(OnMessage onMessage){
-
-        this.onMessage = onMessage;
+    public void setOnMessageListener(OnMessageListener onMessageListener){
+        this.onMessageListener = onMessageListener;
     }
     private static class SocketConnection{
         private Socket socket;

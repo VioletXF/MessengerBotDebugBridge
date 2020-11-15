@@ -1,6 +1,9 @@
 # MessengerBotDebugBridge (MDB)
 sample code is also included in `Main.java`
 
+## Releases
+[See latest release](https://github.com/VioletXF/MessengerBotDebugBridge/releases)
+
 ## Dependencies
 org.json is needed to use this library.
 ```gradle

@@ -94,7 +94,6 @@ public class DebugRoom {
                 .put("message", messageData.getMessage());
         json.put("data", data);
         String str = json.toString();
-        System.out.println("send: "+str);
         writer.write(str+"\n");
         writer.flush();
     }

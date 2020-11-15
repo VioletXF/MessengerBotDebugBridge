@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ADB {
-    private String adbPath;
+    private final String adbPath;
     public ADB(String adbPath){
         this.adbPath = adbPath;
     }
     public String execute(String args) throws IOException {
-        System.out.println(args);
         Process process = Runtime.getRuntime().exec(adbPath+" "+args);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         StringBuilder sb = new StringBuilder();

@@ -46,6 +46,13 @@ debugRoom.setOnErrorListener(new DebugRoom.OnErrorListener() {
     }
 });
 
+debugRoom.setOnReadEndListener(new DebugRoom.OnReadEndListener() {
+    @Override
+    public void onEvent() {
+        System.out.println("read end");
+    }
+});
+
 DebugRoom.MessageData messageData = new DebugRoom.MessageData(); // build message to send
 messageData.setBotName("MyBot") // target bot name (important)
         .setAuthorName("David")

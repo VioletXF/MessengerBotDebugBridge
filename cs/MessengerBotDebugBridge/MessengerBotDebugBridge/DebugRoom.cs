@@ -47,7 +47,7 @@ namespace Mdb {
                         line = reader.ReadLine();
                     } catch (IOException e) {
                         if (!connection.IsConnected()) break;
-                        Console.Out.WriteLine(e);
+                        Console.WriteLine(e);
                     }
                     if (line == null) {
                         break;

@@ -1,4 +1,5 @@
 # MessengerBotDebugBridge (MDB)
+MDB helps you manage [MessengerBot](https://play.google.com/store/apps/details?id=com.xfl.msgbot) remotely
 
 ## Releases
 [See latest release](https://github.com/VioletXF/MessengerBotDebugBridge/releases)

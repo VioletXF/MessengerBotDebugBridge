@@ -31,7 +31,7 @@ namespace Mdb {
             if (error.Length != 0) throw new Exception(error);
 
 
-            return "";
+            return result;
         }
     }
 }

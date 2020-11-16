@@ -4,11 +4,11 @@ sample code is also included in `Main.java`
 ## Releases
 [See latest release](https://github.com/VioletXF/MessengerBotDebugBridge/releases)
 
-## MDB for Java
+## Example for Java
 
-[See README](https://github.com/VioletXF/MessengerBotDebugBridge/tree/master/java/README.md)
+[See java/README.md](https://github.com/VioletXF/MessengerBotDebugBridge/tree/master/java/README.md)
 
-## MDB for C#
+## Example for C#
 
-Work in Progress
+[See this project](https://github.com/VioletXF/DebugRoomCompanion)
 

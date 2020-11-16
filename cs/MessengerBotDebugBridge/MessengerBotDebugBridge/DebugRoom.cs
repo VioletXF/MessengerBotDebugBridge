@@ -4,19 +4,29 @@ using System.Net;
 using System.IO;
 using System.Threading;
 using Newtonsoft.Json.Linq;
-namespace MessengerBotDebugBridge {
+namespace Mdb {
     public class DebugRoom {
-        public interface OnMessageListener {
-            void OnEvent(MessageData message);
+        public event EventHandler Message;
+        public event EventHandler Error;
+        public class MessageEventArgs: EventArgs
+        {
+            public MessageData messageData;
+            public MessageEventArgs(MessageData messageData)
+            {
+                this.messageData = messageData;
+            }
         }
-        public interface OnErrorListener {
-            void OnEvent(string error);
+        public class ErrorEventArgs: EventArgs
+        {
+            public string error;
+            public ErrorEventArgs(string error)
+            {
+                this.error = error;
+            }
         }
         private SocketConnection connection;
         private StreamReader reader;
         private StreamWriter writer;
-        private OnMessageListener onMessageListener;
-        private OnErrorListener onErrorListener;
         private ADB adb;
         private bool isConnected = false;
         public DebugRoom(ADB adb) {
@@ -52,10 +62,11 @@ namespace MessengerBotDebugBridge {
                         msg.SetAuthorName(data.Value<string>("authorName"));
                         msg.SetMessage(data.Value<string>("message"));
                         msg.SetIsBot(data.Value<bool>("isBot"));
+                        Message?.Invoke(this, new MessageEventArgs(msg));
                     } else if(name == "badRequest:debugRoom") {
                         JObject edata = json.Value<JObject>("data");
                         string error = edata.Value<string>("error");
-                        onErrorListener.OnEvent(error);
+                        Error?.Invoke(this, new ErrorEventArgs(error));
                     }
 
                 }
@@ -91,12 +102,7 @@ namespace MessengerBotDebugBridge {
             writer.WriteLine(str);
             writer.Flush();
         }
-        public void SetOnErrorListener(OnErrorListener onErrorListener) {
-            this.onErrorListener = onErrorListener;
-        }
-        public void SetOnMessageListener(OnMessageListener onMessageListener) {
-            this.onMessageListener = onMessageListener;
-        }
+
 
         private class SocketConnection {
             private Socket socket;

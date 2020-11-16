@@ -17,7 +17,7 @@ public class MDB{
      * @return adb execute results
      * @throws IOException when IOException occurs while executing adb command
      */
-    public String compile(String botName) throws IOException {
+    public String compile(String botName) throws Exception {
         String namearg = convertBotName(botName);
 
         return adb.execute("shell am broadcast -a com.xfl.msgbot.broadcast.compile -p com.xfl.msgbot --es name "+namearg);
@@ -29,7 +29,7 @@ public class MDB{
      * @return adb execute results
      * @throws IOException when IOException occurs while executing adb command
      */
-    public String setBotPower(String botName, Boolean power) throws IOException{
+    public String setBotPower(String botName, Boolean power) throws Exception {
         String namearg = convertBotName(botName);
         String powerString = power.toString();
         return adb.execute("shell am broadcast -a com.xfl.msgbot.broadcast.set_bot_power -p com.xfl.msgbot --es name "+namearg+" --ez power "+powerString);
@@ -40,7 +40,7 @@ public class MDB{
      * @return adb execute results
      * @throws IOException when IOException occurs while executing adb command
      */
-    public String setActivation(Boolean activation) throws IOException {
+    public String setActivation(Boolean activation) throws Exception {
         String activationString = activation.toString();
         return adb.execute("shell am broadcast -a com.xfl.msgbot.broadcast.set_activation -p com.xfl.msgbot --ez activation "+activationString);
     }

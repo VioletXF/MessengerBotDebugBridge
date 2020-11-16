@@ -26,7 +26,7 @@ public class DebugRoom {
         this.adb = adb;
         connection = new SocketConnection();
     }
-    public void connect(Integer localPort, Integer remotePort) throws IOException{
+    public void connect(Integer localPort, Integer remotePort) throws Exception {
         adb.execute("forward tcp:"+localPort+" tcp:"+remotePort);
         connection.connect(localPort);
         reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

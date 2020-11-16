@@ -27,14 +27,19 @@ public class Main {
             });
 
             DebugRoom.MessageData messageData = new DebugRoom.MessageData(); // build message to send
-            messageData.setBotName("MyBot") // target bot name (important)
+            messageData.setBotName("asdf") // target bot name (important)
                     .setAuthorName("David")
                     .setIsGroupChat(true)
                     .setPackageName("com.xfl.msgbot")
                     .setRoomName("MyChatRoom")
                     .setMessage("Hello World!");
             debugRoom.send(messageData);
-
+            debugRoom.setOnReadEndListener(new DebugRoom.OnReadEndListener() {
+                @Override
+                public void onEvent() {
+                    System.out.println("read end");
+                }
+            });
 
 
         } catch (Exception e) {

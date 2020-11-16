@@ -14,6 +14,7 @@ public class DebugRoom {
     private BufferedWriter writer;
     private OnMessageListener onMessageListener;
     private OnErrorListener onErrorListener;
+    private OnReadEndListener onReadEndListener;
     private final ADB adb;
     private Boolean isConnected = false;
     public interface OnMessageListener {
@@ -21,6 +22,9 @@ public class DebugRoom {
     }
     public interface OnErrorListener {
         void onEvent(String error);
+    }
+    public interface OnReadEndListener{
+        void onEvent();
     }
     public DebugRoom(ADB adb){
         this.adb = adb;
@@ -54,17 +58,19 @@ public class DebugRoom {
                         msg.setAuthorName(data.getString("authorName"));
                         msg.setMessage(data.getString("message"));
                         msg.setIsBot(data.getBoolean("isBot"));
-                        onMessageListener.onEvent(msg);
+                        if(onMessageListener!=null)
+                            onMessageListener.onEvent(msg);
                     }
                     case "badRequest:debugRoom" -> {
                         JSONObject edata = json.getJSONObject("data");
                         String error = edata.getString("error");
-                        onErrorListener.onEvent(error);
+                        if(onErrorListener!=null)
+                            onErrorListener.onEvent(error);
                     }
                 }
-
-
             }
+            if(onReadEndListener!=null)
+                onReadEndListener.onEvent();
         });
         readThread.start();
 
@@ -102,6 +108,9 @@ public class DebugRoom {
     }
     public void setOnMessageListener(OnMessageListener onMessageListener){
         this.onMessageListener = onMessageListener;
+    }
+    public void setOnReadEndListener(OnReadEndListener onReadEndListener){
+        this.onReadEndListener = onReadEndListener;
     }
     private static class SocketConnection{
         private Socket socket;

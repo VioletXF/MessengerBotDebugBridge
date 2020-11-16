@@ -8,6 +8,7 @@ namespace Mdb {
     public class DebugRoom {
         public event EventHandler Message;
         public event EventHandler Error;
+        public event EventHandler ReadEnd;
         public class MessageEventArgs: EventArgs
         {
             public MessageData messageData;
@@ -70,6 +71,7 @@ namespace Mdb {
                     }
 
                 }
+                ReadEnd?.Invoke(this, null);
             });
             readThread.IsBackground = true;
             readThread.Start();

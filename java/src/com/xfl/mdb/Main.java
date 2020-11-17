@@ -1,15 +1,14 @@
 package com.xfl.mdb;
 
-import java.io.IOException;
-
 public class Main {
     static public void main(String[] args){
         String adbPath = "C:\\SDK\\Android\\platform-tools\\adb.exe"; // your adb path
         try {
             ADB adb = new ADB(adbPath);
-            DebugRoom debugRoom = new DebugRoom(adb);
+            Communicator communicator = new Communicator(adb);
+            DebugRoom debugRoom = communicator.getDebugRoom();
             Integer port = 9500; // default port of MessengerBot
-            debugRoom.connect(port, port); // localPort, remotePort
+            communicator.connect(port, port); // localPort, remotePort
             debugRoom.setOnMessageListener(new DebugRoom.OnMessageListener() {
                 @Override
                 public void onEvent(DebugRoom.MessageData message) {
@@ -41,6 +40,26 @@ public class Main {
                 }
             });
 
+            BotManager botManager = communicator.getBotManager();
+            botManager.setOnCompileStartListener(new BotManager.OnCompileStartListener() {
+                @Override
+                public void onEvent(String botName) {
+                    System.out.println("compile start: "+botName);
+                }
+            });
+            botManager.setOnCompileSuccessListener(new BotManager.OnCompileSuccessListener() {
+                @Override
+                public void onEvent(String botName) {
+                    System.out.println("compile success: "+botName);
+                }
+            });
+            botManager.setOnCompileErrorListener(new BotManager.OnCompileErrorListener() {
+                @Override
+                public void onEvent(String botName, String error) {
+                    System.out.println("compile error: "+botName+"  "+error);
+                }
+            });
+            botManager.compile("asdf");
 
         } catch (Exception e) {
             e.printStackTrace();

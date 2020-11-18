@@ -5,48 +5,63 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class BotManager {
+
+
+    public interface OnCompileStartListener {
+        void onEvent(String botName);
+    }
+    public interface OnCompileFinishListener{
+        void onEvent(String botName, boolean success, String error);
+    }
+    public interface OnBadRequestListener{
+        void onEvent(String botName, String error);
+    }
+    public interface OnRuntimeErrorListener{
+        void onEvent(String botName, String error);
+    }
     private OnCompileStartListener onCompileStartListener;
-    private OnCompileSuccessListener onCompileSuccessListener;
-    private OnCompileErrorListener onCompileErrorListener;
+    private OnCompileFinishListener onCompileFinishListener;
+    private OnBadRequestListener onBadRequestListener;
+    private OnRuntimeErrorListener onRuntimeErrorListener;
     private final Communicator communicator;
 
-    public BotManager(Communicator communicator){
+    protected BotManager(Communicator communicator){
         this.communicator = communicator;
     }
     public OnCompileStartListener getOnCompileStartListener() {
         return onCompileStartListener;
     }
 
-    public OnCompileSuccessListener getOnCompileSuccessListener() {
-        return onCompileSuccessListener;
+    public OnCompileFinishListener getOnCompileFinishListener() {
+        return onCompileFinishListener;
+    }
+
+    public OnBadRequestListener getOnBadRequestListener() {
+        return onBadRequestListener;
+    }
+
+    public OnRuntimeErrorListener getOnRuntimeErrorListener() {
+        return onRuntimeErrorListener;
     }
 
     public void setOnCompileStartListener(OnCompileStartListener onCompileStartListener) {
         this.onCompileStartListener = onCompileStartListener;
     }
 
-    public void setOnCompileSuccessListener(OnCompileSuccessListener onCompileSuccessListener) {
-        this.onCompileSuccessListener = onCompileSuccessListener;
+    public void setOnCompileFinishListener(OnCompileFinishListener onCompileSuccessListener) {
+        this.onCompileFinishListener = onCompileSuccessListener;
     }
 
-    public OnCompileErrorListener getOnCompileErrorListener() {
-        return onCompileErrorListener;
+    public void setOnBadRequestListener(OnBadRequestListener onBadRequestListener) {
+        this.onBadRequestListener = onBadRequestListener;
     }
 
-    public void setOnCompileErrorListener(OnCompileErrorListener onCompileErrorListener) {
-        this.onCompileErrorListener = onCompileErrorListener;
+    public void setOnRuntimeErrorListener(OnRuntimeErrorListener onRuntimeErrorListener) {
+        this.onRuntimeErrorListener = onRuntimeErrorListener;
     }
 
 
-    public interface OnCompileStartListener {
-        void onEvent(String botName);
-    }
-    public interface OnCompileSuccessListener {
-        void onEvent(String botName);
-    }
-    public interface OnCompileErrorListener{
-        void onEvent(String botName, String error);
-    }
+
 
     public void compile(String botName) throws IOException {
         JSONObject json = new JSONObject();

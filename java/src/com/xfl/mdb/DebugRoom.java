@@ -7,36 +7,38 @@ import org.json.JSONObject;
 import java.io.*;
 
 public class DebugRoom {
-
+    public interface OnMessageListener {
+        void onEvent(MessageData message);
+    }
+    public interface OnBadRequestListener {
+        void onEvent(String botName, String error);
+    }
     private OnMessageListener onMessageListener;
-    private OnErrorListener onErrorListener;
-    private OnReadEndListener onReadEndListener;
+    private OnBadRequestListener onBadRequestListener;
     private final Communicator communicator;
-    public DebugRoom(Communicator communicator){
+
+    protected DebugRoom(Communicator communicator) {
         this.communicator = communicator;
     }
     public OnMessageListener getOnMessageListener() {
         return onMessageListener;
     }
 
-    public OnErrorListener getOnErrorListener() {
-        return onErrorListener;
-    }
-
-    public OnReadEndListener getOnReadEndListener() {
-        return onReadEndListener;
+    public OnBadRequestListener getOnBadRequestListener() {
+        return onBadRequestListener;
     }
 
 
-    public interface OnMessageListener {
-        void onEvent(MessageData message);
+    public void setOnMessageListener(OnMessageListener onMessageListener){
+        this.onMessageListener = onMessageListener;
     }
-    public interface OnErrorListener {
-        void onEvent(String error);
+
+    public void setOnBadRequestListener(OnBadRequestListener onErrorListener){
+        this.onBadRequestListener = onErrorListener;
     }
-    public interface OnReadEndListener{
-        void onEvent();
-    }
+
+
+
 
 
 
@@ -55,15 +57,8 @@ public class DebugRoom {
         String str = json.toString();
         communicator.writeLine(str);
     }
-    public void setOnErrorListener(OnErrorListener onErrorListener){
-        this.onErrorListener = onErrorListener;
-    }
-    public void setOnMessageListener(OnMessageListener onMessageListener){
-        this.onMessageListener = onMessageListener;
-    }
-    public void setOnReadEndListener(OnReadEndListener onReadEndListener){
-        this.onReadEndListener = onReadEndListener;
-    }
+
+
 
 
     public static class MessageData {

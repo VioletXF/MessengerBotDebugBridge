@@ -1,8 +1,10 @@
 package com.xfl.mdb;
 
+import java.io.IOException;
+
 public class Main {
     static public void main(String[] args){
-        String adbPath = "C:\\SDK\\Android\\platform-tools\\adb.exe"; // your adb path
+        String adbPath = "C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe"; // your adb path
         try {
             ADB adb = new ADB(adbPath);
             Communicator communicator = new Communicator(adb);
@@ -18,22 +20,22 @@ public class Main {
                 }
             });
 
-            debugRoom.setOnErrorListener(new DebugRoom.OnErrorListener() {
+            debugRoom.setOnBadRequestListener(new DebugRoom.OnBadRequestListener() {
                 @Override
-                public void onEvent(String error) {
+                public void onEvent(String botName, String error) {
                     System.out.println("error: " + error);
                 }
             });
 
             DebugRoom.MessageData messageData = new DebugRoom.MessageData(); // build message to send
-            messageData.setBotName("asdf") // target bot name (important)
+            messageData.setBotName("MyBot") // target bot name (important)
                     .setAuthorName("David")
                     .setIsGroupChat(true)
                     .setPackageName("com.xfl.msgbot")
                     .setRoomName("MyChatRoom")
                     .setMessage("Hello World!");
-            debugRoom.send(messageData);
-            debugRoom.setOnReadEndListener(new DebugRoom.OnReadEndListener() {
+
+            communicator.setOnReadEndListener(new Communicator.OnReadEndListener() {
                 @Override
                 public void onEvent() {
                     System.out.println("read end");
@@ -47,19 +49,35 @@ public class Main {
                     System.out.println("compile start: "+botName);
                 }
             });
-            botManager.setOnCompileSuccessListener(new BotManager.OnCompileSuccessListener() {
+            botManager.setOnCompileFinishListener(new BotManager.OnCompileFinishListener() {
                 @Override
-                public void onEvent(String botName) {
-                    System.out.println("compile success: "+botName);
+                public void onEvent(String botName, boolean success, String error) {
+                    if(success) {
+                        System.out.println("compile success: " + botName);
+                        try {
+                            debugRoom.send(messageData);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("sent");
+                    } else {
+                        System.out.println("compile error: "+botName+"  "+error);
+                    }
                 }
             });
-            botManager.setOnCompileErrorListener(new BotManager.OnCompileErrorListener() {
+            botManager.setOnBadRequestListener(new BotManager.OnBadRequestListener() {
                 @Override
                 public void onEvent(String botName, String error) {
-                    System.out.println("compile error: "+botName+"  "+error);
+                    System.out.println(error+": "+botName);
                 }
             });
-            botManager.compile("asdf");
+            botManager.setOnRuntimeErrorListener(new BotManager.OnRuntimeErrorListener() {
+                @Override
+                public void onEvent(String botName, String error) {
+                    System.out.println("RuntimeError("+botName+"): "+error);
+                }
+            });
+            botManager.compile("MyBot");
 
         } catch (Exception e) {
             e.printStackTrace();

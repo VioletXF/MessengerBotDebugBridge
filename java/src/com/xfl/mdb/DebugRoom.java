@@ -5,90 +5,45 @@ package com.xfl.mdb;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.Socket;
 
 public class DebugRoom {
-    private final SocketConnection connection;
-    private BufferedReader reader;
-    private BufferedWriter writer;
-    private OnMessageListener onMessageListener;
-    private OnErrorListener onErrorListener;
-    private OnReadEndListener onReadEndListener;
-    private final ADB adb;
-    private Boolean isConnected = false;
     public interface OnMessageListener {
         void onEvent(MessageData message);
     }
-    public interface OnErrorListener {
-        void onEvent(String error);
+    public interface OnBadRequestListener {
+        void onEvent(String botName, String error);
     }
-    public interface OnReadEndListener{
-        void onEvent();
-    }
-    public DebugRoom(ADB adb){
-        this.adb = adb;
-        connection = new SocketConnection();
-    }
-    public void connect(Integer localPort, Integer remotePort) throws Exception {
-        adb.execute("forward tcp:"+localPort+" tcp:"+remotePort);
-        connection.connect(localPort);
-        reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-        isConnected = true;
-        Thread readThread = new Thread(() -> {
-            while(true) {
-                String line = null;
-                try {
-                    line = reader.readLine();
-                } catch (IOException e) {
-                    if (connection.isClosed()) break;
-                    e.printStackTrace();
-                }
-                if (line == null) {
-                    break;
-                }
-                JSONObject json = new JSONObject(line);
-                switch (json.getString("name")) {
-                    case "debugRoom" -> {
-                        MessageData msg = new MessageData();
-                        JSONObject data = json.getJSONObject("data");
-                        msg.setBotName(data.getString("botName"));
-                        msg.setRoomName(data.getString("roomName"));
-                        msg.setAuthorName(data.getString("authorName"));
-                        msg.setMessage(data.getString("message"));
-                        msg.setIsBot(data.getBoolean("isBot"));
-                        if(onMessageListener!=null)
-                            onMessageListener.onEvent(msg);
-                    }
-                    case "badRequest:debugRoom" -> {
-                        JSONObject edata = json.getJSONObject("data");
-                        String error = edata.getString("error");
-                        if(onErrorListener!=null)
-                            onErrorListener.onEvent(error);
-                    }
-                }
-            }
-            if(onReadEndListener!=null)
-                onReadEndListener.onEvent();
-        });
-        readThread.start();
+    private OnMessageListener onMessageListener;
+    private OnBadRequestListener onBadRequestListener;
+    private final Communicator communicator;
 
+    protected DebugRoom(Communicator communicator) {
+        this.communicator = communicator;
     }
-    public void disconnect() throws IOException {
-        if(!isConnected) {
-            throw new IOException("not connected yet");
-        }
-        connection.disconnect();
-        reader.close();
-        writer.close();
-        isConnected = false;
+    protected OnMessageListener getOnMessageListener() {
+        return onMessageListener;
     }
+
+    protected OnBadRequestListener getOnBadRequestListener() {
+        return onBadRequestListener;
+    }
+
+
+    public void setOnMessageListener(OnMessageListener onMessageListener){
+        this.onMessageListener = onMessageListener;
+    }
+
+    public void setOnBadRequestListener(OnBadRequestListener onBadRequestListener){
+        this.onBadRequestListener = onBadRequestListener;
+    }
+
+
+
+
+
 
     public void send(MessageData messageData) throws IOException {
-        if(!isConnected){
-            throw new IOException("not connected yet");
-        }
+
         JSONObject json = new JSONObject();
         json.put("name","debugRoom");
         JSONObject data = new JSONObject();
@@ -100,36 +55,10 @@ public class DebugRoom {
                 .put("message", messageData.getMessage());
         json.put("data", data);
         String str = json.toString();
-        writer.write(str+"\n");
-        writer.flush();
+        communicator.writeLine(str);
     }
-    public void setOnErrorListener(OnErrorListener onErrorListener){
-        this.onErrorListener = onErrorListener;
-    }
-    public void setOnMessageListener(OnMessageListener onMessageListener){
-        this.onMessageListener = onMessageListener;
-    }
-    public void setOnReadEndListener(OnReadEndListener onReadEndListener){
-        this.onReadEndListener = onReadEndListener;
-    }
-    private static class SocketConnection{
-        private Socket socket;
-        public void connect(Integer port) throws IOException{
-            socket = new Socket(InetAddress.getLoopbackAddress(),port);
-        }
-        public void disconnect() throws IOException {
-            socket.close();
-        }
-        public Boolean isClosed(){
-            return socket.isClosed();
-        }
-        public InputStream getInputStream() throws IOException {
-            return socket.getInputStream();
-        }
-        public OutputStream getOutputStream() throws IOException{
-            return socket.getOutputStream();
-        }
-    }
+
+
 
 
     public static class MessageData {

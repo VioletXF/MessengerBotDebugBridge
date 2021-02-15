@@ -20,11 +20,11 @@ public class DebugRoom {
     protected DebugRoom(Communicator communicator) {
         this.communicator = communicator;
     }
-    public OnMessageListener getOnMessageListener() {
+    protected OnMessageListener getOnMessageListener() {
         return onMessageListener;
     }
 
-    public OnBadRequestListener getOnBadRequestListener() {
+    protected OnBadRequestListener getOnBadRequestListener() {
         return onBadRequestListener;
     }
 
@@ -33,8 +33,8 @@ public class DebugRoom {
         this.onMessageListener = onMessageListener;
     }
 
-    public void setOnBadRequestListener(OnBadRequestListener onErrorListener){
-        this.onBadRequestListener = onErrorListener;
+    public void setOnBadRequestListener(OnBadRequestListener onBadRequestListener){
+        this.onBadRequestListener = onBadRequestListener;
     }
 
 
@@ -128,8 +128,9 @@ public class DebugRoom {
             return message;
         }
 
-        public void setMessage(String message) {
+        public MessageData setMessage(String message) {
             this.message = message;
+            return this;
         }
         public String toString(){
             return "botName: " +

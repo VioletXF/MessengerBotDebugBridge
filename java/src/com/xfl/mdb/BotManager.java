@@ -28,19 +28,19 @@ public class BotManager {
     protected BotManager(Communicator communicator){
         this.communicator = communicator;
     }
-    public OnCompileStartListener getOnCompileStartListener() {
+    protected OnCompileStartListener getOnCompileStartListener() {
         return onCompileStartListener;
     }
 
-    public OnCompileFinishListener getOnCompileFinishListener() {
+    protected OnCompileFinishListener getOnCompileFinishListener() {
         return onCompileFinishListener;
     }
 
-    public OnBadRequestListener getOnBadRequestListener() {
+    protected OnBadRequestListener getOnBadRequestListener() {
         return onBadRequestListener;
     }
 
-    public OnRuntimeErrorListener getOnRuntimeErrorListener() {
+    protected OnRuntimeErrorListener getOnRuntimeErrorListener() {
         return onRuntimeErrorListener;
     }
 

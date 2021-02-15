@@ -199,8 +199,9 @@ public class DebugRoom {
             return message;
         }
 
-        public void setMessage(String message) {
+        public MessageData setMessage(String message) {
             this.message = message;
+            return this;
         }
         public String toString(){
             return "botName: " +

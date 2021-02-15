@@ -7,7 +7,7 @@ public class Main {
         String adbPath = "C:\\Users\\user\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe"; // your adb path
         try {
             ADB adb = new ADB(adbPath);
-            Communicator communicator = new Communicator(adb);
+            Communicator communicator = new Communicator(adb); // Create Communicator to communicate with MessengerBot
             DebugRoom debugRoom = communicator.getDebugRoom();
             Integer port = 9500; // default port of MessengerBot
             communicator.connect(port, port); // localPort, remotePort
